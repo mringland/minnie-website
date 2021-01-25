@@ -1,17 +1,15 @@
 ---
-title: "About Me"
+title: "Minnie"
 image: "IMG_E7814.jpg"
 links:
   - label: LinkedIn
-    url: "https://linkedin.com/"
-  - label: Twitter
-    url: "https://twitter.com/"
+    url: "https://www.linkedin.com/in/minervaringland"
   - label: GitHub
-    url: "https://github.com/"
+    url: "https://github.com/mringland"
   - label: Email
-    url: "mailto:email@email.com"
+    url: "mailto:mringland@bren.ucsb.edu"
 output:
-  postcards::jolla
+  postcards::trestles
 site: distill::distill_website
 ---
  
