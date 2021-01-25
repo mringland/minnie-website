@@ -1,0 +1,18 @@
+---
+title: "About Me"
+image: "IMG_E7814.jpg"
+links:
+  - label: LinkedIn
+    url: "https://linkedin.com/"
+  - label: Twitter
+    url: "https://twitter.com/"
+  - label: GitHub
+    url: "https://github.com/"
+  - label: Email
+    url: "mailto:email@email.com"
+output:
+  postcards::jolla
+site: distill::distill_website
+---
+ 
+I am originally from Buffalo, NY and now living in Santa Barbara, CA. I'm pursuing a master's degree from UCSB in environmental science and management. I love talking about going for walks on the beach, trying new restaurants, and dreaming of places to go once we can travel again.

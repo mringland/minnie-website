@@ -1,0 +1,20 @@
+{
+  "articles": [
+    {
+      "path": "about.html",
+      "title": "About this site",
+      "description": "Some additional details about the website",
+      "author": [],
+      "contents": "\r\n\r\n\r\n\r\n",
+      "last_modified": "2021-01-24T18:39:04-08:00"
+    },
+    {
+      "path": "index.html",
+      "title": "About Me",
+      "author": [],
+      "contents": "\r\n\r\n          \r\n          \r\n          Minnie Ringland\r\n          \r\n          \r\n          Home\r\n          About\r\n          Minnie!\r\n          ☰\r\n          \r\n          \r\n      \r\n        \r\n          \r\n            About Me\r\n          \r\n          \r\n            \r\n              I am originally from Buffalo, NY and now living in Santa Barbara, CA. I’m pursuing a master’s degree from UCSB in environmental science and management. I love talking about going for walks on the beach, trying new restaurants, and dreaming of places to go once we can travel again.\r\n            \r\n            \r\n              I am originally from Buffalo, NY and now living in Santa Barbara, CA. I’m pursuing a master’s degree from UCSB in environmental science and management. I love talking about going for walks on the beach, trying new restaurants, and dreaming of places to go once we can travel again.\r\n            \r\n          \r\n\r\n          \r\n            \r\n              \r\n                  \r\n                    \r\n                      LinkedIn\r\n                    \r\n                  \r\n                \r\n                                \r\n                  \r\n                    \r\n                      Twitter\r\n                    \r\n                  \r\n                \r\n                                \r\n                  \r\n                    \r\n                      GitHub\r\n                    \r\n                  \r\n                \r\n                                \r\n                  \r\n                    \r\n                      Email\r\n                    \r\n                  \r\n                \r\n                              \r\n          \r\n\r\n          \r\n            \r\n              \r\n                                \r\n                  \r\n                    LinkedIn\r\n                  \r\n                \r\n                                \r\n                  \r\n                    Twitter\r\n                  \r\n                \r\n                                \r\n                  \r\n                    GitHub\r\n                  \r\n                \r\n                                \r\n                  \r\n                    Email\r\n                  \r\n                \r\n                              \r\n            \r\n          \r\n        \r\n      \r\n    \r\n\r\n    \r\n    \r\n    ",
+      "last_modified": "2021-01-24T18:39:05-08:00"
+    }
+  ],
+  "collections": []
+}

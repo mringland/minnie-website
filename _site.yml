@@ -1,0 +1,14 @@
+name: "."
+title: "Minnie Ringland"
+description: |
+  Minnie Ringland
+output_dir: "docs"
+navbar:
+  right:
+    - text: "Home"
+      href: index.html
+    - text: "About"
+      href: about.html
+    - text: "Minnie!"
+      href: minnie.html
+output: distill::distill_article
