@@ -1,6 +1,6 @@
 ---
 title: "Minnie"
-image: "IMG_E7814.jpg"
+image: "minnie_bren.jpg"
 links:
   - label: LinkedIn
     url: "https://www.linkedin.com/in/minervaringland"
