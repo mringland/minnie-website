@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/2021-02-08-day-2/",
+    "title": "day 2",
+    "description": "my second attempt at blogging.",
+    "author": [
+      {
+        "name": "minnie",
+        "url": {}
+      }
+    ],
+    "date": "2021-02-08",
+    "categories": [],
+    "contents": "\r\nHi. Thank you for making it this far!\r\nDistill is a publication format for scientific and technical writing, native to the web.\r\nLearn more about using Distill at https://rstudio.github.io/distill.\r\n\r\n\r\n\r\n",
+    "preview": {},
+    "last_modified": "2021-02-08T21:17:41-08:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-01-24-welcome/",
     "title": "welcome!",
     "description": "my very first post.",
