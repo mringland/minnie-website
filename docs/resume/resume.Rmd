@@ -44,18 +44,18 @@ tribble(
 
 ```{r}
 tribble(
-  ~Year, ~Position, ~Company, ~Desc,
-  2020-2021, "Project Manager", "County of Santa Barbara", "Yearlong capstone project to produce a Natural and Working Lands Component, including a carbon stock assessment and an emissions forecast, for incorporation into the County of Santa Barbara’s 2030 Climate Action Plan update",
-  2020, "Planning Intern", "Rincon Consultants, Inc", "Quantified greenhouse gas emissions for 5 utility clients as third party verifier ensuring compliance with California Air Resources Board Mandatory Reporting rule and other regulations",
-  2017-2019, "Environmental Scientist", "SolEpoxy, Inc", "Implemented and upgraded company’s environmental management system in conformity with ISO 14001:2015"
+  ~Position, ~Year, ~Company, ~Desc,
+  "Project Manager", "2020-2021", "County of Santa Barbara", "Yearlong capstone project to produce a Natural and Working Lands Component, including a carbon stock assessment and an emissions forecast, for incorporation into the County of Santa Barbara’s 2030 Climate Action Plan update",
+  "Planning Intern", "2020",  "Rincon Consultants, Inc", "Quantified greenhouse gas emissions for 5 utility clients as third party verifier ensuring compliance with California Air Resources Board Mandatory Reporting rule and other regulations",
+  "Environmental Scientist", "2017-2019", "SolEpoxy, Inc", "Implemented and upgraded company’s environmental management system in conformity with ISO 14001:2015"
 ) %>% 
-  detailed_entries(Year, Position, Company, Desc)
+  detailed_entries(Position, Year, Company, Desc)
 ```
 
 # Skills
 
-* Python  
-* R  
+* Python
+* R
 * Microsoft Office
 * QIIME
 
