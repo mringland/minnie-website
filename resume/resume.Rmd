@@ -21,11 +21,12 @@ library(vitae)
 I'm passionate about finding and implementing comprehensive, scalable solutions to the challenges of climate change and pollution. The Master's program at Bren has allowed me to explore policy and economic strategies that promote sustainability while taking into account social and equity implications.
 
 I am interested in
-- climate policy
-- urban planning
-- ESG/CSR
-- plastic and waste reduction
-- sustainable food systems
+  
+* climate policy  
+* urban planning  
+* ESG/CSR  
+* plastic and waste reduction  
+* sustainable food systems  
 
 # Education
 
@@ -43,24 +44,18 @@ tribble(
 
 ```{r}
 tribble(
-  ~Year, ~Type, ~Desc,
-  1903, "Physics", "Awarded for her work on radioactivity with Pierre Curie and Henri Becquerel",
-  1911, "Chemistry", "Awarded for the discovery of radium and polonium"
+  ~Year, ~Position, ~Company, ~Desc,
+  2020-2021, "Project Manager", "County of Santa Barbara", "Yearlong capstone project to produce a Natural and Working Lands Component, including a carbon stock assessment and an emissions forecast, for incorporation into the County of Santa Barbara’s 2030 Climate Action Plan update",
+  2020, "Planning Intern", "Rincon Consultants, Inc", "Quantified greenhouse gas emissions for 5 utility clients as third party verifier ensuring compliance with California Air Resources Board Mandatory Reporting rule and other regulations",
+  2017-2019, "Environmental Scientist", "SolEpoxy, Inc", "Implemented and upgraded company’s environmental management system in conformity with ISO 14001:2015"
 ) %>% 
-  brief_entries(
-    glue::glue("Nobel Prize in {Type}"),
-    Year, 
-    Desc
-  )
+  detailed_entries(Year, Position, Company, Desc)
 ```
 
-# Publications
+# Skills
 
-```{r}
-library(dplyr)
-knitr::write_bib(c("vitae", "tibble"), "packages.bib")
-
-bibliography_entries("packages.bib") %>%
-  arrange(desc(author$family), issued)
-```
+* Python  
+* R  
+* Microsoft Office
+* QIIME
 
