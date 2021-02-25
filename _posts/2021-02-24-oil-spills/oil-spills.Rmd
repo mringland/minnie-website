@@ -1,0 +1,128 @@
+---
+title: "Investigating Spatial Distribution of Oil Spills in California"
+description: |
+  ESM 244 - Assignment 3 Task 1
+author:
+  - name: minnie
+    url: {}
+date: "Feb 25, 2021"
+output:
+  distill::distill_article:
+    self_contained: false
+    theme: paper
+    code_folding: hide
+    highlight: zenburn
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+library(tidyverse) #for everything
+library(here) # for file reference
+library(sf) # for spatial data
+library(tmap) # for interactive maps
+```
+
+
+## About the Data
+
+The Office of Spill Prevention and Response (OSPR) runs a statewide oil spill tracking information system called the Incident Tracking Database. An "incident", for purposes of this database, is "a discharge or threatened discharge of petroleum or other deleterious material into the waters of the state." The data are collected by OSPR Field Response Team members for Marine oil spills and by OSPR Inland Pollution Coordinators and Wardens for Inland incidents.
+
+We'll explore the data collected in 2008 to explore the spatial distribution of incidents across the state.
+
+### California counties
+
+First, we load the geographic boundaries of the state as a background layer.
+
+```{r counties}
+# Read in data with read_sf()
+ca_counties <- read_sf(here("ca_counties","CA_Counties_TIGER2016.shp"))
+
+# Create subset with just name and land area - spatial info will *stick*
+ca_subset <- ca_counties %>% 
+  select(NAME, ALAND) %>% 
+  rename(county_name = NAME, land_area = ALAND)
+
+# Check CRS
+#ca_subset %>% st_crs()
+
+# Plot using geom_sf()
+ggplot(data = ca_subset) +
+  geom_sf(aes(fill = land_area), color = "white", size = 0.1) +
+  theme_void() +
+  scale_fill_gradientn(colors = c("skyblue2","royalblue3","darkslateblue")) +
+  labs(fill = "Land area (sq meters)")
+
+```
+
+The coordinate reference system (CRS) used for this dataset is: "`r st_crs(ca_subset)$input`", EPSG `r st_crs(ca_subset)$epsg`.
+
+### Oil Spill Incidence
+
+Next, we load the oil spill data from 2008.
+
+```{r spills, echo = FALSE}
+# Read in data from ds394
+spill_data <- read_sf(here("ds394","ds394.shp"))
+
+# Check the CRS:
+#spill_data %>% st_crs()
+
+# Use st_transform() to convert CRS
+new_spill_data <- st_transform(spill_data, 3857) #3857
+
+# Then check it: 
+#new_spill_data %>% st_crs()
+```
+
+Note that this dataset uses a different CRS ("`r st_crs(spill_data)$input`") from the state spatial data, so we need to update it so they match (both "`r st_crs(new_spill_data)$input`"). 
+
+Now, we can plot them together! The interactive map below allows you to investigate the location of each incident that took place in 2008:
+
+```{r interative map, fig.cap="**Figure 1.** 2008 Oil Spills in California"}
+#ggplot() +
+#  geom_sf(data = ca_subset) +
+#  geom_sf(data = new_spill_data, size = 1, color = "red")
+
+# Set viewing mode to "interactive":
+tmap_mode(mode = "view")
+
+tm_shape(ca_subset) +
+  tm_fill("land_area", palette = "Blues", title="Land area (sq meters)") +
+  tm_borders(col = "white", lwd = 0.5) +
+  tm_shape(new_spill_data) +
+  tm_dots() +
+  tm_scale_bar()
+
+```
+
+### By County
+
+We might be interested in seeing which counties experienced the most incidents that year. We can use the powerful function `st_join()` to spatially join our datasets so that the spills can be sorted by county. We'll focus on inland events only, and color-code by incident frequency:
+
+```{r spills by county, fig.cap="**Figure 2.** Chloropleth showing counties color-coded by spill frequency"}
+
+spill_by_county <- ca_subset %>% 
+  st_join(new_spill_data) %>% # first, spatial join
+  filter(INLANDMARI == "Inland") %>% # then, filter for inland events
+  count(county_name)
+
+ggplot(data = spill_by_county) +
+  geom_sf(aes(fill = n), color = "white", size = 0.1) +
+  scale_fill_gradientn(colors = c("lightgray","orange","red")) +
+  theme_minimal() +
+  labs(fill = "Number of spills")
+```
+
+We can see that LA county had by far the most oil spills in 2008. Further exploration of the data could reveal more about where those incidents took place within the county, to highlight possible operations of concern.
+
+***
+
+**Data Sources:**
+
+1. *Oil Spill Incident Tracking [ds394]* California Department of Fish and Game, Office of Spill Prevention and Response. Published July 23, 2009. Available at https://map.dfg.ca.gov/metadata/ds0394.html
+
+2. *CA Geographic Boundaries* California Department of Technology using US Census Bureau's 2016 MAF/TIGER database. Last updated October 23, 2019. Available at https://data.ca.gov/dataset/ca-geographic-boundaries
+

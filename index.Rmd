@@ -1,5 +1,6 @@
 ---
-title: "Minnie"
+title: "Minnie Ringland"
+subtitle: "MESM 2021"
 image: "minnie_bren.jpg"
 links:
   - label: LinkedIn
@@ -13,4 +14,8 @@ output:
 site: distill::distill_website
 ---
  
-I am originally from Buffalo, NY and now living in Santa Barbara, CA. I'm pursuing a master's degree from UCSB in environmental science and management. I love talking about going for walks on the beach, trying new restaurants, and dreaming of places to go once we can travel again.
+I am originally from Buffalo, NY and now living in Santa Barbara, CA. I'm pursuing a master's degree from the Bren School of Environmental Science & Management at UCSB, with a focus on Economics and Politics of the Environment, as well as Energy and Climate.
+
+I like going for walks on the beach, trying new restaurants, and dreaming of places to go once we can travel again.
+
+![](sunset.JPG)

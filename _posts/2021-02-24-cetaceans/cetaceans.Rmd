@@ -1,0 +1,128 @@
+---
+title: "Cetacean Species Richness in California"
+description: |
+  ESM 244 - Assignment 3 Task 2
+author:
+  - name: minnie
+    url: {}
+date: "Feb 25, 2021"
+output:
+  distill::distill_article:
+    self_contained: false
+    theme: yeti
+    code_folding: hide
+    highlight: haddock
+    toc: true
+    toc_float: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+library(raster) ### NOTE: attaching this BEFORE tidyverse
+library(tidyverse)
+library(here)
+library(sf)
+library(fasterize)
+library(rnaturalearth)
+#library(rgeos)
+```
+***  
+
+
+### About the Data
+
+AquaMaps is a tool that generates predictions for occurence of marine species. The model uses estimates of species preference for environmental conditions including depth, water temperature, salinity, primary productivity, and sea ice or coastal areas. These  "environmental  envelopes"  are  matched  against local environmental conditions to determine the suitability of a given area in the ocean for a particular  species. 
+
+We'll generate predicted range maps for 35 cetacean species that can be found along the Southern California Bight, shown below.
+
+![https://oceanservice.noaa.gov/facts/bight.html](https://aambpublicoceanservice.blob.core.windows.net/oceanserviceprod/facts/bight.jpg)
+
+### Probability Maps
+
+For each species, we download a raster showing the probability of occurrence in each cell.
+
+```{r, cache = TRUE, fig.cap="Figure 1. Probability of Occurence of 16 of 35 Cetacean Species"}
+# Create a list of files to use and rasterize as a stack
+
+aquamap_files <- list.files(path = here("ca_cetaceans"), full.names = TRUE, pattern = "*.tif")
+
+aq_stack <- raster::stack(aquamap_files)
+smaller_aq <- raster::aggregate(aq_stack, fact = 2, fun = mean) # Use this smaller/faster version to build code
+
+plot(aq_stack)
+```
+
+
+
+The gradient from green (high probability) to peach (low probability) gives a sense of the species' spatial extent - areas where the species is very likely to be found and areas where the species may be found or occasionally is found but not often. We can see that the spatial distribution varies for each species. 
+
+For the purpose of determining overall species richness, we need a binary present/not present value for each species. We will therefore set a probability threshold of 0.7, above which we will consider the species present, and below which we will consider the species not present.
+
+
+```{r set presence threshold, fig.cap="Figure 2. Binary Probability of Occurrence with Threshold of 0.7"}
+
+is_present <- function(x, thresh = 0.7) {
+  y <- ifelse(x >= thresh, 1, 0)
+  return(y)
+}
+
+#testvec <- c("1", "0.5")
+#is_present(testvec)
+
+presence <- calc(aq_stack, fun = is_present)
+plot(presence)
+
+```
+
+
+
+Now we can see that we've converted our data layers to show that species are present (green) or not present (yellow).
+
+We can now combine all layers to sum up total species richness, and provide the coastline as a background layer for context.
+
+```{r coastline}
+# coastline downloaded from rnaturalearth
+
+coast <- ne_coastline(scale = "medium", returnclass = "sf") # simple features so we can plot with geom_sf()
+
+coast_df <- coast %>% 
+  as.data.frame()
+#coast_df <- raster::rasterToPoints(coast) %>%
+#  as.data.frame()
+
+```
+
+
+```{r calculate richness}
+# convert raster to dataframe for ggplot
+richness <- calc(presence, fun = sum, na.rm = TRUE)
+
+species_df <- raster::rasterToPoints(richness) %>%
+  as.data.frame()
+
+```
+
+
+```{r plotting, fig.cap="**Figure 3.** Cetacean Species Richness along the California Coast, using threshold probability > 0.7"}
+
+ggplot() +
+ geom_sf(data = coast, size = 1.5, color = "darkslateblue") +
+  geom_raster(data = species_df, aes(x = x, y = y, fill = layer), alpha = 0.6) +
+   coord_sf(xlim = c(-130, -114), ylim = c(31, 39)) +
+  scale_fill_gradient(low = 'white', high = 'navyblue') +
+  labs(x = "Longitude", y = "Latitude", title = "Cetacean Species Richness", fill = "Number of Species Present") +
+  theme_minimal() #+
+  #theme(panel.background = element_rect(fill = 'slateblue4'))
+
+```
+The plot shows that highest species richness occurs along Southern California, in two distinct bands offset from the coastline. It would be interesting to see if and how this data might change at higher spatial resolution.  
+
+
+***
+
+**Data Source:**
+
+Kaschner, K., K. Kesner-Reyes, C. Garilao, J. Segschneider, J. Rius-Barile, T. Rees, and R. Froese. 2019. AquaMaps: Predicted range maps for aquatic species. World wide web electronic publication, [www.aquamaps.org], Version 10/2019.
+
