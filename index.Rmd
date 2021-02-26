@@ -14,8 +14,10 @@ output:
 site: distill::distill_website
 ---
  
-I am originally from Buffalo, NY and now living in Santa Barbara, CA. I'm pursuing a master's degree from the Bren School of Environmental Science & Management at UCSB, with a focus on Economics and Politics of the Environment, as well as Energy and Climate.
+Hi! Thanks so much for visiting my page.
 
-I like going for walks on the beach, trying new restaurants, and dreaming of places to go once we can travel again.
+I'm currently pursuing a master's degree from the Bren School of Environmental Science & Management at UCSB, with a focus on Economics and Politics of the Environment, as well as Energy and Climate. I have a background in biology, experience in industrial environmental compliance, and am now focused on finding ways to promote a low-carbon future through policy and corporate standards.
 
-![](sunset.JPG)
+I am a transplant from Buffalo, NY and am now flourishing in sunny Santa Barbara, CA. When I'm not in classes or meetings, I like to for walk on the beach, tend to our at-home compost, and dream of places to go once we can travel again.
+
+![](sunset.JPG, height = 500)
