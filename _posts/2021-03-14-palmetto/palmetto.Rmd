@@ -1,5 +1,5 @@
 ---
-title: "Classifying palmetto species of south-central Florida"
+title: "Classifying Palmetto Species of South-Central Florida"
 description: |
   ESM 244 - Assignment 2 Task 2
 author:
@@ -54,7 +54,7 @@ palmetto_trimmed <- palmetto %>%
 ***  
 ### Visualizations
 
-Let's start with a very broad survey of the data using `ggpairs`, which will generate a correlogram comparing all predictor variables
+Let's start with a very broad survey of the data using `ggpairs`, which will generate a correlogram comparing all predictor variables.  
 
 ```{r, fig.cap="Correlogram of palmetto data variables"}
 palmetto_trimmed %>% 
