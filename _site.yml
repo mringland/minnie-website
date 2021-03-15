@@ -11,7 +11,7 @@ navbar:
     - text: "Portfolio"
       href: about.html
     - text: "Resume"
-      href: resume\nice_resume.pdf
+      href: resume\resume_new.pdf
     - text: "Data Analysis"
       href: blog.html
 output: distill::distill_article
