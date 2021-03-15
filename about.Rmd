@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 A team of 5 students working for the County of Santa Barbara to incorporate a natural and working lands (NWL) component into the Climate Action Plan update. Includes a carbon stock and emissions inventory, a projection to 2030, stakeholder engagement about carbon-smart management practices, and recommendations of how the County can promote future carbon sequestration through NWL management.
 
+Check out our project website [here](https://carboncounters.weebly.com/)
 
 
 ***
@@ -25,12 +26,21 @@ A team of 5 students working for the County of Santa Barbara to incorporate a na
 
 A team of five students working on studying the climate-related risks to Bren Hall and the Bren community, with recommendations on how to mitigate potential damages.
 
+```{r out.width="100%", out.height="500"}
+knitr::include_graphics("ESM_271_Report.pdf")
+```
+
 
 ***
 
 
 ## Corporate Sustainability Plan
 
-### 5 Year Sustainability Roadmap for Dole Foods, Inc
+### 5 Year Sustainability Roadmap for Dole Foods, Inc.
 
 A team of four students working on a sustainability plan, focused on food, people, and the environment, for Dole Foods.
+
+```{r out.width="100%", out.height="500"}
+knitr::include_graphics('Dole_SustainabilityPlan_ESM281_March2021.pdf')
+```
+

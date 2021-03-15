@@ -1,0 +1,173 @@
+---
+title: "Parameter Estimation – Wild Fish Catch"
+description: |
+  ESM 244 - Assignment 4 Task 2
+author:
+  - name: minnie
+    url: {}
+date: 03-11-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    theme: paper
+    code_folding: hide
+    highlight: zenburn
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+library(tidyverse) # for everything
+library(patchwork) # for organizing plots
+library(gt) # for tables
+library(broom) # for tidy model output
+library(here)
+
+```
+
+
+***  
+
+#### About the Data
+
+Today, we'll explore trends in wild fish catch and aquaculture production around the world over the last 60-70 years. The Earth Policy Institute compiled data collected by the United Nations Food and Agriculture Organization, Fisheries Division. Fish data include fishes, crustaceans, mollusks, and various other aquatic animals. We use the total global catch, from all countries, from 1950-2012, divided according to whether the fish were wild or farmed.
+
+<br>  
+
+#### Preliminary Data Exploration
+
+```{r}
+# Read in data
+global_catch <- read_csv(here("fish_catch.csv")) %>% 
+  rename("Year"=1, "Wild"=2, "Farmed"=3, "Total"=4) %>% 
+  slice(5:67) %>% 
+  mutate(Wild = as.numeric(Wild), Farmed = as.numeric(Farmed), Total=as.numeric(Total))
+
+global_catch_long <- global_catch %>% 
+  pivot_longer(cols = Wild:Total, names_to = "Catch")
+
+p1 <- ggplot(data=global_catch_long) +
+  geom_point(aes(x=Year, y=value, color = Catch)) +
+  scale_x_discrete(breaks=seq(1950, 2020, by = 10)) +
+  scale_color_brewer(palette = 10) +
+  labs(y = "Catch (million tons)", color = "Catch Type") +
+  theme_light()
+
+p2 <- ggplot(data=global_catch_long) +
+  geom_point(aes(x=Year, y=log(value), color = Catch)) +
+  scale_x_discrete(breaks=seq(1950, 2020, by = 10)) +
+  scale_color_brewer(palette = 10) +
+  labs(y = "Natural Log of Catch", color = "Catch Type") +
+  theme_light()
+
+(p1 + p2) & theme_light()
+```
+
+We see that for farmed fish, there is exponential growth in the catch over time. The wild catch looks more linear but then plateaus. When we plot the natural log of catch, we see a logistic growth-type curve for the wild catch. The logistic growth equation is:
+
+$P(t)=\frac{K}{1+Ae^{-kt}}$, where
+
+- $K$ is the carrying capacity
+- $A$ is $\frac{K-P_0}{P_0}$
+- $k$ is the growth rate constant
+
+
+<br>  
+
+#### Find initial estimates for *K*, *A* and *k*
+
+Let's estimate the growth constant during the curve's exponential phase (to get a starting-point guess for *k*): 
+
+```{r}
+# Reset years
+catch_years <- global_catch %>% 
+  select(Year, Wild) %>%
+  mutate(Year = as.numeric(Year)) %>%  
+  mutate(year_new = Year - min(Year))
+
+# Select only exponential growth phase and log-transform
+catch_exp <- catch_years %>% 
+  filter(year_new < 40) %>% 
+  mutate(ln_catch = log(Wild))
+
+catch_exp2 <- catch_years %>% 
+  filter(year_new <= 40 & year_new >= 20) %>% 
+  mutate(ln_catch = log(Wild))
+  
+# Model linear to get *k* estimate (the slope of this linear equation is an estimate of the growth rate constant):
+lm_k <- lm(ln_catch ~ year_new, data = catch_exp)
+#lm_k2 <- lm(ln_catch ~ year_new, data = catch_exp2)
+# This gives the same parameter estimates as the full 40 year span estimate
+
+K_est <- exp(4.5)
+A_est <- (K_est - catch_years$Wild[1])/(catch_years$Wild[1])
+# 
+```
+
+Looking at just 1950-1990, the growth rate constant is estimated by a linear model to be `r lm_k$coefficients[2]`.
+
+From the graphs, we can use an estimate of carrying capacity *K* ~90 million tons and *A*  ~1990, or year 40. These estimates will serve as the starting points for our iterative algorithm trying to converge on the parameters. 
+
+<br>  
+
+#### Estimate parameters using onlinear least squares (NLS)
+
+We'll use the most common algorithm - Gauss-Newton - to converge on parameter estimates that minimize the the sum of squares of residuals. 
+
+```{r}
+catch_nls <- nls(Wild ~ K/(1 + A*exp(-r*year_new)),
+              data = catch_years,
+              start = list(K = K_est, A = A_est, r = lm_k$coefficients[2]),
+)
+
+# See the model summary (null hypothesis: parameter value = 0)
+#summary(catch_nls)
+
+# Use broom:: functions to get model outputs in tidier format: 
+model_out <- broom::tidy(catch_nls)
+
+model_out %>% 
+  gt() %>% 
+  tab_header(title = "Gauss-Newton NLS Parameter Estimates") %>% 
+  cols_label(
+    estimate = "Estimate",
+    std.error = "Standard Error",
+    statistic = "Statistic",
+    p.value = "P-Value"
+  )
+
+```
+
+
+
+
+Our model with the estimated parameters is:
+$$P(t) = \frac{100.3}{1+4.316e^{-0.7t}}$$
+
+<br>  
+
+
+#### Visualize prediction
+```{r}
+# Make predictions for the population at all of those times (time) in the original df: 
+catch_predict <- predict(catch_nls)
+
+# Bind predictions to original data frame:
+catch_complete <- data.frame(catch_years, catch_predict)
+
+# Plot them all together:
+ggplot(data = catch_complete, aes(x = Year, y = Wild)) +
+  geom_point(color="turquoise4", size=3) +
+  geom_line(aes(x = Year, y = catch_predict), size=1.2, linetype="dotdash") +
+  scale_x_continuous(breaks=seq(1950, 2020, by = 10)) +
+  scale_y_continuous(breaks=seq(0, 120, by = 10)) +
+  labs(y = "Catch (million tons)", title = "Global Wild Catch from 1950-2012", subtitle="Actual and Predicted using NLS") +
+  theme_light()
+```
+
+
+***
+
+*Data Source:*  
+Global wild fish catch and aquaculture production, compiled by Earth Policy Institute with 1950-2010 from U.N. Food and Agriculture Organization (FAO), Global Capture Production and Global Aquaculture Production, electronic databases, at www.fao.org/fishery/topic/16140/en.
