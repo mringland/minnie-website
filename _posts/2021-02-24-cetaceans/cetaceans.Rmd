@@ -9,7 +9,7 @@ date: "Feb 25, 2021"
 output:
   distill::distill_article:
     self_contained: false
-    theme: yeti
+    theme: paper
     code_folding: hide
     highlight: haddock
     toc: true
@@ -43,7 +43,7 @@ We'll generate predicted range maps for 35 cetacean species that can be found al
 
 For each species, we download a raster showing the probability of occurrence in each cell.
 
-```{r, cache = TRUE, fig.cap="Figure 1. Probability of Occurence of 16 of 35 Cetacean Species"}
+```{r, cache = TRUE, fig.cap="Probability of Occurence of 16 of 35 Cetacean Species"}
 # Create a list of files to use and rasterize as a stack
 
 aquamap_files <- list.files(path = here("ca_cetaceans"), full.names = TRUE, pattern = "*.tif")
@@ -61,7 +61,7 @@ The gradient from green (high probability) to peach (low probability) gives a se
 For the purpose of determining overall species richness, we need a binary present/not present value for each species. We will therefore set a probability threshold of 0.7, above which we will consider the species present, and below which we will consider the species not present.
 
 
-```{r set presence threshold, fig.cap="Figure 2. Binary Probability of Occurrence with Threshold of 0.7"}
+```{r fig.cap="Binary Probability of Occurrence with Threshold of 0.7"}
 
 is_present <- function(x, thresh = 0.7) {
   y <- ifelse(x >= thresh, 1, 0)
@@ -105,7 +105,7 @@ species_df <- raster::rasterToPoints(richness) %>%
 ```
 
 
-```{r plotting, fig.cap="**Figure 3.** Cetacean Species Richness along the California Coast, using threshold probability > 0.7"}
+```{r fig.cap="Cetacean Species Richness along the California Coast, using threshold probability > 0.7"}
 
 ggplot() +
  geom_sf(data = coast, size = 1.5, color = "darkslateblue") +

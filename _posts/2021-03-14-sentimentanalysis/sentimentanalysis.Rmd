@@ -9,7 +9,7 @@ date: 02-25-2021
 output:
   distill::distill_article:
     self_contained: false
-    theme: yeti
+    theme: paper
     code_folding: hide
     highlight: haddock
     toc: true
@@ -40,7 +40,7 @@ This tool is called TerraCount, and the Resilient Merced report describes how th
 Today, we'll be exploring the text of the report to highlight key terms, and analyze the tone or sentiment of the report.
 
 
-```{r read PDFs, cache = TRUE}
+```{r, cache = TRUE}
 # Read in the pdfs
 merced_text <- pdf_text(here("resilientcountiesguide_1_.pdf"))
 #sb_text <- pdf_text(here("pdfs","2016_ghg.pdf"))
@@ -59,7 +59,7 @@ The PDF text is initially read in as a character vector - a single, very long ro
 - remove stopwords  
 
 
-```{r tidy and wrangle}
+```{r }
 # Turn into a tidyverse df, split by line
 merced_tidy <- data.frame(merced_text) %>% 
   mutate(text_full = str_split(merced_text, pattern = '\\n')) %>% 
@@ -88,12 +88,12 @@ merced_tokens <- merced_tidy %>%
 
 We are left with a dataset containing only the words of interest, organized by document section. We can see that each section uses the following number of unique words.
 
-```{r unique words}
+```{r }
 merced_wordcount <- merced_tokens %>% 
   group_by(section) %>% 
   summarize(words = n_distinct(word))
 
-kable(merced_wordcount, caption = "Table 1. Unique non-stopwords in each section of Resilient Merced") %>%
+kable(merced_wordcount, caption = "Unique non-stopwords in each section of Resilient Merced") %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 
@@ -106,7 +106,7 @@ We notice that Section 5 has by far the most number of unique words - this makes
 
 Which words were used most frequently in each section?
 
-```{r top 5, fig.cap="Figure 1. Top 5 words by section of Resilient Merced"}
+```{r fig.cap="Top 5 words by section of Resilient Merced"}
 
 merced_counts <- merced_tokens %>% 
   count(section, word)
@@ -131,7 +131,7 @@ ggplot(data = top_5_words, aes(x= word, y = n)) +
 
 We can also look at the most frequently used words across the entire report.
 
-```{r top 50, fig.cap="Figure 2. Top 50  words used in Resilient Merced"}
+```{r fig.cap="Top 50  words used in Resilient Merced"}
 
 merced_top50 <- merced_counts %>% 
   arrange(-n) %>% 
@@ -154,7 +154,7 @@ We can use built-in lexicons to analyze the mood or tone of the report. First, w
 
 We see that all sections are overwhelmingly "positive" with section 5 containing the most "negative words".
 
-```{r sentiment analysis with afinn, fig.cap="Figure 3. Sentiment Values by Section"}
+```{r fig.cap="Sentiment Values by Section"}
 merced_afinn <- merced_tokens %>% 
   inner_join(get_sentiments("afinn"))
 
@@ -172,7 +172,7 @@ ggplot(data = afinn_counts, aes(x = value, y = n)) +
 ```
 
 
-```{r mean sentiment analysis with afinn, fig.cap="Figure 4. Mean Sentiment Score for each section of Resilient Merced"}
+```{r fig.cap="Mean Sentiment Score for each section of Resilient Merced"}
 
 # Find the mean afinn score by chapter: 
 afinn_means <- merced_afinn %>% 
@@ -196,7 +196,7 @@ Calculating the average `afinn` score for each section, we see that section 2 ha
 Let's also use the `bing` lexicon from  [Bing Liu and collaborators](https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html), which also assigns words into positive and negative categories, but only on a binary scale. We see that the same patterns are borne out.
 
 
-```{r bing, fig.cap="Figure 5. Sentiment Analysis with Bing Positive/Negative Scores"}
+```{r fig.cap="Sentiment Analysis with Bing Positive/Negative Scores"}
 
 merced_bing <- merced_tokens %>% 
   inner_join(get_sentiments("bing"))

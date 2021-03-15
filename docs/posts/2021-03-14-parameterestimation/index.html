@@ -106,7 +106,7 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Parameter Estimation – Wild Fish Catch"]},{"type":"character","attributes":{},"value":["ESM 244 - Assignment 4 Task 2"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["minnie"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["03-11-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","theme","code_folding","highlight","toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"character","attributes":{},"value":["yeti"]},{"type":"character","attributes":{},"value":["hide"]},{"type":"character","attributes":{},"value":["haddock"]},{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Parameter Estimation – Wild Fish Catch"]},{"type":"character","attributes":{},"value":["ESM 244 - Assignment 4 Task 2"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["minnie"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["03-11-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","theme","code_folding","highlight","toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"character","attributes":{},"value":["paper"]},{"type":"character","attributes":{},"value":["hide"]},{"type":"character","attributes":{},"value":["haddock"]},{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -2407,11 +2407,23 @@ d-appendix d-footnote-list a.footnote-backlink {
 </div>
 
 <div class="d-article">
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#about-the-data">About the Data</a></li>
+<li><a href="#preliminary-data-exploration">Preliminary Data Exploration</a></li>
+<li><a href="#find-initial-estimates-for-k-a-and-k">Find initial estimates for <em>K</em>, <em>A</em> and <em>k</em></a></li>
+<li><a href="#estimate-parameters-using-onlinear-least-squares-nls">Estimate parameters using onlinear least squares (NLS)</a></li>
+<li><a href="#visualize-prediction">Visualize prediction</a></li>
+</ul>
+</nav>
+</div>
 <hr />
-<h4 id="about-the-data">About the Data</h4>
+<h3 id="about-the-data">About the Data</h3>
 <p>Today, we’ll explore trends in wild fish catch and aquaculture production around the world over the last 60-70 years. The Earth Policy Institute compiled data collected by the United Nations Food and Agriculture Organization, Fisheries Division. Fish data include fishes, crustaceans, mollusks, and various other aquatic animals. We use the total global catch, from all countries, from 1950-2012, divided according to whether the fish were wild or farmed.</p>
 <p><br></p>
-<h4 id="preliminary-data-exploration">Preliminary Data Exploration</h4>
+<h3 id="preliminary-data-exploration">Preliminary Data Exploration</h3>
 <div class="layout-chunk" data-layout="l-body">
 <details>
 <summary>
@@ -2455,7 +2467,7 @@ hide
 <li><span class="math inline">\(k\)</span> is the growth rate constant</li>
 </ul>
 <p><br></p>
-<h4 id="find-initial-estimates-for-k-a-and-k">Find initial estimates for <em>K</em>, <em>A</em> and <em>k</em></h4>
+<h3 id="find-initial-estimates-for-k-a-and-k">Find initial estimates for <em>K</em>, <em>A</em> and <em>k</em></h3>
 <p>Let’s estimate the growth constant during the curve’s exponential phase (to get a starting-point guess for <em>k</em>):</p>
 <div class="layout-chunk" data-layout="l-body">
 <details>
@@ -2493,7 +2505,7 @@ hide
 <p>Looking at just 1950-1990, the growth rate constant is estimated by a linear model to be 0.035623.</p>
 <p>From the graphs, we can use an estimate of carrying capacity <em>K</em> ~90 million tons and <em>A</em> ~1990, or year 40. These estimates will serve as the starting points for our iterative algorithm trying to converge on the parameters.</p>
 <p><br></p>
-<h4 id="estimate-parameters-using-onlinear-least-squares-nls">Estimate parameters using onlinear least squares (NLS)</h4>
+<h3 id="estimate-parameters-using-onlinear-least-squares-nls">Estimate parameters using onlinear least squares (NLS)</h3>
 <p>We’ll use the most common algorithm - Gauss-Newton - to converge on parameter estimates that minimize the the sum of squares of residuals.</p>
 <div class="layout-chunk" data-layout="l-body">
 <details>
@@ -2528,7 +2540,7 @@ hide
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#hwppzuwkhj .gt_table {
+#wwzwszlcqc .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -2553,7 +2565,7 @@ hide
   border-left-color: #D3D3D3;
 }
 
-#hwppzuwkhj .gt_heading {
+#wwzwszlcqc .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2565,7 +2577,7 @@ hide
   border-right-color: #D3D3D3;
 }
 
-#hwppzuwkhj .gt_title {
+#wwzwszlcqc .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2575,7 +2587,7 @@ hide
   border-bottom-width: 0;
 }
 
-#hwppzuwkhj .gt_subtitle {
+#wwzwszlcqc .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2585,13 +2597,13 @@ hide
   border-top-width: 0;
 }
 
-#hwppzuwkhj .gt_bottom_border {
+#wwzwszlcqc .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#hwppzuwkhj .gt_col_headings {
+#wwzwszlcqc .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2606,7 +2618,7 @@ hide
   border-right-color: #D3D3D3;
 }
 
-#hwppzuwkhj .gt_col_heading {
+#wwzwszlcqc .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2626,7 +2638,7 @@ hide
   overflow-x: hidden;
 }
 
-#hwppzuwkhj .gt_column_spanner_outer {
+#wwzwszlcqc .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2638,15 +2650,15 @@ hide
   padding-right: 4px;
 }
 
-#hwppzuwkhj .gt_column_spanner_outer:first-child {
+#wwzwszlcqc .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#hwppzuwkhj .gt_column_spanner_outer:last-child {
+#wwzwszlcqc .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#hwppzuwkhj .gt_column_spanner {
+#wwzwszlcqc .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2658,7 +2670,7 @@ hide
   width: 100%;
 }
 
-#hwppzuwkhj .gt_group_heading {
+#wwzwszlcqc .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2680,7 +2692,7 @@ hide
   vertical-align: middle;
 }
 
-#hwppzuwkhj .gt_empty_group_heading {
+#wwzwszlcqc .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2695,15 +2707,15 @@ hide
   vertical-align: middle;
 }
 
-#hwppzuwkhj .gt_from_md > :first-child {
+#wwzwszlcqc .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#hwppzuwkhj .gt_from_md > :last-child {
+#wwzwszlcqc .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#hwppzuwkhj .gt_row {
+#wwzwszlcqc .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2722,7 +2734,7 @@ hide
   overflow-x: hidden;
 }
 
-#hwppzuwkhj .gt_stub {
+#wwzwszlcqc .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2734,7 +2746,7 @@ hide
   padding-left: 12px;
 }
 
-#hwppzuwkhj .gt_summary_row {
+#wwzwszlcqc .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2744,7 +2756,7 @@ hide
   padding-right: 5px;
 }
 
-#hwppzuwkhj .gt_first_summary_row {
+#wwzwszlcqc .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2754,7 +2766,7 @@ hide
   border-top-color: #D3D3D3;
 }
 
-#hwppzuwkhj .gt_grand_summary_row {
+#wwzwszlcqc .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2764,7 +2776,7 @@ hide
   padding-right: 5px;
 }
 
-#hwppzuwkhj .gt_first_grand_summary_row {
+#wwzwszlcqc .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2774,11 +2786,11 @@ hide
   border-top-color: #D3D3D3;
 }
 
-#hwppzuwkhj .gt_striped {
+#wwzwszlcqc .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#hwppzuwkhj .gt_table_body {
+#wwzwszlcqc .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2787,7 +2799,7 @@ hide
   border-bottom-color: #D3D3D3;
 }
 
-#hwppzuwkhj .gt_footnotes {
+#wwzwszlcqc .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2801,13 +2813,13 @@ hide
   border-right-color: #D3D3D3;
 }
 
-#hwppzuwkhj .gt_footnote {
+#wwzwszlcqc .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#hwppzuwkhj .gt_sourcenotes {
+#wwzwszlcqc .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2821,46 +2833,46 @@ hide
   border-right-color: #D3D3D3;
 }
 
-#hwppzuwkhj .gt_sourcenote {
+#wwzwszlcqc .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#hwppzuwkhj .gt_left {
+#wwzwszlcqc .gt_left {
   text-align: left;
 }
 
-#hwppzuwkhj .gt_center {
+#wwzwszlcqc .gt_center {
   text-align: center;
 }
 
-#hwppzuwkhj .gt_right {
+#wwzwszlcqc .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#hwppzuwkhj .gt_font_normal {
+#wwzwszlcqc .gt_font_normal {
   font-weight: normal;
 }
 
-#hwppzuwkhj .gt_font_bold {
+#wwzwszlcqc .gt_font_bold {
   font-weight: bold;
 }
 
-#hwppzuwkhj .gt_font_italic {
+#wwzwszlcqc .gt_font_italic {
   font-style: italic;
 }
 
-#hwppzuwkhj .gt_super {
+#wwzwszlcqc .gt_super {
   font-size: 65%;
 }
 
-#hwppzuwkhj .gt_footnote_marks {
+#wwzwszlcqc .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="hwppzuwkhj" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+<div id="wwzwszlcqc" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
   <thead class="gt_header">
     <tr>
       <th colspan="5" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Gauss-Newton NLS Parameter Estimates</th>
@@ -2899,7 +2911,7 @@ hide
 </div>
 <p>Our model with the estimated parameters is: <span class="math display">\[P(t) = \frac{100.3}{1+4.316e^{-0.7t}}\]</span></p>
 <p><br></p>
-<h4 id="visualize-prediction">Visualize prediction</h4>
+<h3 id="visualize-prediction">Visualize prediction</h3>
 <div class="layout-chunk" data-layout="l-body">
 <details>
 <summary>

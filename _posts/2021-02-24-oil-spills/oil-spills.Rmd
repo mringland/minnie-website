@@ -38,7 +38,7 @@ We'll explore the data collected in 2008 to explore the spatial distribution of 
 
 First, we load the geographic boundaries of the state as a background layer.
 
-```{r counties}
+```{r}
 # Read in data with read_sf()
 ca_counties <- read_sf(here("ca_counties","CA_Counties_TIGER2016.shp"))
 
@@ -65,7 +65,7 @@ The coordinate reference system (CRS) used for this dataset is: "`r st_crs(ca_su
 
 Next, we load the oil spill data from 2008.
 
-```{r spills, echo = FALSE}
+```{r echo = FALSE}
 # Read in data from ds394
 spill_data <- read_sf(here("ds394","ds394.shp"))
 
@@ -83,7 +83,7 @@ Note that this dataset uses a different CRS ("`r st_crs(spill_data)$input`") fro
 
 Now, we can plot them together! The interactive map below allows you to investigate the location of each incident that took place in 2008:
 
-```{r interative map, fig.cap="**Figure 1.** 2008 Oil Spills in California"}
+```{r fig.cap="**Figure 1.** 2008 Oil Spills in California"}
 #ggplot() +
 #  geom_sf(data = ca_subset) +
 #  geom_sf(data = new_spill_data, size = 1, color = "red")
@@ -104,7 +104,7 @@ tm_shape(ca_subset) +
 
 We might be interested in seeing which counties experienced the most incidents that year. We can use the powerful function `st_join()` to spatially join our datasets so that the spills can be sorted by county. We'll focus on inland events only, and color-code by incident frequency:
 
-```{r spills by county, fig.cap="**Figure 2.** Chloropleth showing counties color-coded by spill frequency"}
+```{r fig.cap="**Figure 2.** Chloropleth showing counties color-coded by spill frequency"}
 
 spill_by_county <- ca_subset %>% 
   st_join(new_spill_data) %>% # first, spatial join

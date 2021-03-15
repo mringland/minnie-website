@@ -1,11 +1,5 @@
 base
-methods
 emo
-datasets
-utils
-grDevices
-graphics
-stats
 sp
 raster
 tidyverse
