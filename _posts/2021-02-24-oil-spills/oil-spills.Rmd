@@ -85,16 +85,22 @@ Now, we can plot them together! The interactive map below allows you to investig
 
 ```{r fig.cap="**Figure 1.** 2008 Oil Spills in California"}
 #ggplot() +
-#  geom_sf(data = ca_subset) +
-#  geom_sf(data = new_spill_data, size = 1, color = "red")
+  #geom_sf(data = ca_subset) +
+  #geom_sf(data = new_spill_data, size = 1, color = "red")
+
+#tmap bug
+#https://github.com/mtennekes/tmap/issues/551
+untibble = function(x) structure(x, class = setdiff(class(x), c("tbl_df", "tbl")))
+untib_subset <- untibble(ca_subset)
+untib_new <- untibble(new_spill_data)
 
 # Set viewing mode to "interactive":
 tmap_mode(mode = "view")
 
-tm_shape(ca_subset) +
+tm_shape(untib_subset) +
   tm_fill("land_area", palette = "Blues", title="Land area (sq meters)") +
   tm_borders(col = "white", lwd = 0.5) +
-  tm_shape(new_spill_data) +
+  tm_shape(untib_new) +
   tm_dots() +
   tm_scale_bar()
 

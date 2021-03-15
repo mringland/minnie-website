@@ -1,0 +1,188 @@
+---
+title: "Classifying palmetto species of south-central Florida"
+description: |
+  ESM 244 - Assignment 2 Task 2
+author:
+  - name: minnie
+    url: {}
+date: "Feb 9, 2021"
+output:
+  distill::distill_article:
+    self_contained: false
+    theme: paper
+    code_folding: hide
+    highlight: haddock
+    toc: true
+    toc_float: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+library(tidyverse) #for everything
+library(here) # for file reference
+library(lubridate) # for time formats
+library(broom) # for tidy stats
+library(kableExtra) # for customizing tables
+library(GGally) # for ggpairs
+library(patchwork) # for compound figures
+library(jtools) # for effect plots
+
+```
+
+### About the Data
+
+Using Florida palmetto data, I will use binary logistic regression to test the feasibility of using plant height, canopy length, canopy width, and number of green leaves to classify whether a palmetto is species *Serenoa repens* or *Sabal etonia*.
+
+```{r}
+# Read in data as character type to avoid parsing errors 
+palmetto <- read_csv(here("all_palmetto_data.csv"),col_types = cols(.default = 'c'))
+
+# Now mutate to proper classes
+palmetto_trimmed <- palmetto %>% 
+  select(year, species, height:green_lvs) %>% 
+  mutate(year = as.Date(year,"%Y")) %>%
+  mutate(year = lubridate::year(year)) %>% 
+  mutate(species = as.factor(case_when(species == "1" ~ "Serenoa repens",
+                             species == "2" ~ "Sabal etonia"))) %>% 
+  mutate(across(height:green_lvs, as.integer))
+         
+```
+
+
+***  
+### Visualizations
+
+Let's start with a very broad survey of the data using `ggpairs`, which will generate a correlogram comparing all predictor variables
+
+```{r, fig.cap="Correlogram of palmetto data variables"}
+palmetto_trimmed %>% 
+  select(species:green_lvs) %>% 
+  ggpairs(aes(color=species))
+```
+
+From the box-and-whiskers plots in the first row of the correlogram, we can see that canopy length and number of green leaves seem to diverge most by species. Let's look more closely at those two predictor variables...
+
+
+```{r, fig.cap="Histogram showing distribution of canopy length in centimeters for two species of Florida palmetto, binwidth = 5"}
+# Plot height
+# geom_jitter did not show obvious difference
+
+ggplot(data = palmetto_trimmed, aes(x = length)) +
+  geom_histogram(aes(fill=species),color = "white", binwidth = 5) +
+  labs(x = "Canopy Length (cm)",
+       y = "Number of Plants",
+       title = "Palmetto Plant Canopy Length by Species",
+       color = "Species") +
+  scale_fill_manual(values = c("darkolivegreen", "forestgreen")) +
+  theme_light()
+```
+
+
+
+We can see from this histogram that *Sabal* plants appear to have greater canopy length. However, it looks like more *Sabal* plants were counted and both distributions are right-skewed.
+
+
+```{r, fig.cap="Jitter plot showing number of green leaves counted on each plant, by species"}
+# Green leaves
+ggplot(data = palmetto_trimmed, aes(x = species, y = green_lvs)) +
+  geom_jitter(aes(color=species),alpha = 0.5) +
+  labs(x = "Species",
+       y = "Number of Green Leaves per Plant",
+       title = "Palmetto Plant Number of Leaves by Species",
+       color = "Species") +
+  scale_x_discrete(breaks = c("Serenoa repens", "Sabal etonia")) +
+  scale_color_manual(values = c("darkolivegreen", "forestgreen")) +
+  theme_light() +
+  theme(legend.position = "none")
+
+```
+
+
+In the case of green leaves, even a basic jitter plot shows that *Serenoa* tends to have higher counts of green leaves than *Sabal*.
+
+
+*** 
+### Binary Logistic Regression
+
+Now that we have a sense of how the variables vary between the two species, I'll run a binary logistic regression using plant height, canopy length, canopy width and green leaves as predictor variables.
+
+How do these variables relate quantitatively to the probability of a plant being *Serenoa repens* or *Sabal etonia*?  
+
+```{r}
+# Run BLR model
+palmetto_blr <- glm(species ~ height + length + width + green_lvs,
+                            data = palmetto_trimmed,
+                            family = "binomial")
+#palmetto_blr
+#summary(palmetto_blr)
+
+# Get a tidy version w/ broom: 
+blr_tidy <- broom::tidy(palmetto_blr) %>% 
+  mutate(p.value = case_when(p.value < 0.0001 ~ "p < 0.0001"))
+
+# Summarize in nice table
+kable(blr_tidy, caption = "Coefficient Comparison for Palmetto Variables") %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = F) 
+
+```
+*Sabal etonia* is our reference level species, so the coefficients here contribute to the probability of a plant being *Serenoa repens*. The positive coefficients for height and green leaves indicate as height and number of green leaves increase, the odds that a plant is a *Serenoa* also increases. The negative coefficients for length and width indicate that as canopy area increases, the odds that a plant is a *Serenoa* decrease. All coefficients are significant (*p* < 0.001).
+
+
+As an example, let's look at how the model classifies palmetto plants based on height:
+
+```{r,  fig.cap="Effect plot showing probability that model will classify plant as *Serenoa*, based on height"}
+# Effect plot from jtools
+effect_plot(palmetto_blr,
+            pred = height,
+            y = "Probability of Serenoa",
+            interval = TRUE,
+            colors = "forestgreen") +
+  labs(x = "Height (cm)", title = "BLR Prediction from Height: positive correlation") +
+  theme_light()
+```
+
+***  
+
+### Predictive Power
+
+How successfully will this model “classify” a plant as the correct species, using a 50% cutoff?
+
+```{r}
+# Use broom::augment to generate predictions from model
+blr_fitted <- palmetto_blr %>% 
+  broom::augment(type.predict="response")
+
+# Classify based on 50% cutoff from prediction and measure correctness of prediction
+prediction <- blr_fitted %>% 
+ mutate(pred_species = case_when(.fitted < 0.5 ~ "Sabal etonia",
+                                  .fitted > 0.5 ~ "Serenoa repens")) %>% 
+  mutate(correct = case_when(species == pred_species ~ 1,
+                             species != pred_species ~ 0))
+
+# Make into table with measures of model accuracy
+summary <- prediction %>% 
+  select(species, .fitted, correct) %>%
+  group_by(species) %>% 
+  summarize(num_spec = length(species), correct = sum(correct), incorrect = num_spec-correct, pct_correct = round(correct/num_spec*100, digits=2)) %>% 
+  rename("Species" = species,
+         "Total Number of Plants" = num_spec,
+         "Correctly Identified by BLR" = correct,
+         "Incorrectly Identified by BLR" = incorrect,
+         "% Correctly Identified by BLR" = pct_correct)
+
+# Make a nice table
+kable(summary, caption = "Accuracy of BLR Model Predictions") %>% 
+  kable_styling(bootstrap_options = c("striped", "hover")) 
+
+```
+
+Seems like a decent batting average! This suggests that binary logistic regression would be a fairly accurate predictive model for palmetto classification.
+
+
+***
+
+**Data Source:**
+
+Abrahamson, W.G. 2019. Survival, growth and biomass estimates of two dominant palmetto species of south-central Florida from 1981 - 2017, ongoing at 5-year intervals ver 1. Environmental Data Initiative. https://doi.org/10.6073/pasta/f2f96ec76fbbd4b9db431c79a770c4d5
